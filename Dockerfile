@@ -2,12 +2,12 @@ FROM python:3.7-slim
 
 WORKDIR /app
 
-ADD . /app
+COPY ./requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 80
+COPY . /app
 
-ENV NAME World
+EXPOSE 8080
 
 CMD ["python", "app.py"]
