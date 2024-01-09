@@ -1,0 +1,27 @@
+name: Docker CI/CD
+
+on:
+    workflow_run:
+      workflows: ["Python application"]
+      types:
+        - completed
+      branches: [main]
+      condition: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Log in to DockerHub
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Push the Docker image to DockerHub
+      run: docker push my-image-name:$(date +%s)
