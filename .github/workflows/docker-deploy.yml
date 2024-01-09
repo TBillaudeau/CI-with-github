@@ -20,10 +20,10 @@ jobs:
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Set Docker Image Tag
-      run: echo "DOCKER_TAG=ci-cd-with-github:$(date +%s)" >> $GITHUB_ENV
+      run: echo "DOCKER_TAG=${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-with-github:$(date +%s)" >> $GITHUB_ENV
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{ env.DOCKER_TAG }}
 
     - name: Push the Docker image to DockerHub
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_TAG }}
+      run: docker push ${{ env.DOCKER_TAG }}
